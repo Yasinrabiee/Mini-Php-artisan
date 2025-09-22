@@ -3,11 +3,12 @@ In [this repository](https://github.com/Yasinrabiee/Mvc-Without-Laravel) you kne
 
 Now you can have a mini php artisan (like laravel) with useful commands.
 
-Commands:
-
-## make::controller
-## delete::controller
-## list::controller
-## make::model
-## delete::model
-## list::model
+## Manual
+* controller
+   * make controller
+   * delete controller
+   * list controllers
+* model
+  * make model
+  * delete model
+  * list models 
