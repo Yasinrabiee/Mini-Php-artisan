@@ -5,9 +5,9 @@ Now you can have a mini php artisan (like laravel) with useful commands.
 
 Commands:
 
-make::controller
-delete::controller
-list::controller
-make::model
-delete::model
-list::model
+#### make::controller
+#### delete::controller
+#### list::controller
+#### make::model
+#### delete::model
+#### list::model
