@@ -1,0 +1,71 @@
+#!/usr/bin/env php
+<?php
+	function makeController($name)
+	{
+		$content = '';
+
+		$content .= "<?php\n";
+		$content .=	"\trequire_once __DIR__.'/../models/".$name."Model.php';\n\n";
+		$content .= "\tuse eftec\bladeone\BladeOne;\n\n";
+		$content .=	"\tclass ".$name."Controller\n";
+		$content .= "\t{\n";
+		$content .= "\t\tprivate \$blade;\n\n";
+		$content .= "\t\tpublic function __construct()\n";
+		$content .= "\t\t{\n";
+		$content .= "\t\t\t\$this->blade = new BladeOne(__DIR__.'/../views', __DIR__.'/../cache', BladeOne::MODE_AUTO);\n";
+		$content .= "\t\t}\n";
+		$content .=	"\t}\n";
+		$content .= "?>";
+
+		if (file_put_contents('controllers/'.$name.'Controller.php', $content))
+		{
+			echo "$name controller created successfuly...";
+		}
+	}
+
+	function listController()
+	{
+		$folder = './controllers';
+		$files = [];
+
+		$dir = new DirectoryIterator($folder);
+
+		foreach ($dir as $fileInfo)
+		{
+		 	if ($fileInfo->isFile())
+		 	{
+		 		$files[] = $fileInfo->getFileName();
+		 	}
+		}
+
+		print_r($files); 
+	}
+
+
+	$scriptName = $argv[0];
+	$op = explode('::', $argv[1]);
+	$name = $argv[2] ?? '';
+
+	if (!empty($name))
+	{
+		if (ctype_upper($name[0]) == false)
+		{
+			$name[0] = strtoupper($name[0]);
+		}
+	}
+
+	if ($op[0] == 'make')
+	{
+		if ($op[1] == 'controller')
+		{
+			makeController($name);
+		}
+	}
+	elseif ($op[0] == 'list')
+	{
+		if ($op[1] == 'controller')
+		{
+			listController();
+		}
+	}
+?>
