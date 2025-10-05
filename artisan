@@ -1,71 +1,88 @@
 #!/usr/bin/env php
 <?php
-	function makeController($name)
+
+	class Controller
 	{
-		$content = '';
-
-		$content .= "<?php\n";
-		$content .=	"\trequire_once __DIR__.'/../models/".$name."Model.php';\n\n";
-		$content .= "\tuse eftec\bladeone\BladeOne;\n\n";
-		$content .=	"\tclass ".$name."Controller\n";
-		$content .= "\t{\n";
-		$content .= "\t\tprivate \$blade;\n\n";
-		$content .= "\t\tpublic function __construct()\n";
-		$content .= "\t\t{\n";
-		$content .= "\t\t\t\$this->blade = new BladeOne(__DIR__.'/../views', __DIR__.'/../cache', BladeOne::MODE_AUTO);\n";
-		$content .= "\t\t}\n";
-		$content .=	"\t}\n";
-		$content .= "?>";
-
-		if (file_put_contents('controllers/'.$name.'Controller.php', $content))
+		public static function make($name)
 		{
-			echo "$name controller created successfuly...";
+			if (empty($name))
+			{
+				echo "Controller name can not be empty...";
+				return 0;
+			}
+
+			$content = '';
+
+			$content .= "<?php\n";
+			$content .= "\t# Load controllers class\n";
+			$content .= "\tspl_autoload_register(function (\$class)\n";
+			$content .= "\t{\n";
+			$content .= "\t\trequire_once __DIR__.\"/models/\$class.php\";\n";
+			$content .= "\t});\n";
+
+			$content .= "\tuse eftec\bladeone\BladeOne;\n\n";
+			$content .=	"\tclass ".$name."\n";
+			$content .= "\t{\n";
+			$content .= "\t\tprivate \$blade;\n\n";
+			$content .= "\t\tpublic function __construct()\n";
+			$content .= "\t\t{\n";
+			$content .= "\t\t\t\$this->blade = new BladeOne(__DIR__.'/../views', __DIR__.'/../cache', BladeOne::MODE_AUTO);\n";
+			$content .= "\t\t}\n";
+			$content .=	"\t}\n";
+			$content .= "?>";
+
+			if (file_put_contents('controllers/'.$name.'.php', $content))
+			{
+				echo "$name controller created successfuly...";
+			}
+		}
+
+		public static function list()
+		{
+			$folder = './controllers';
+			$files = [];
+
+			$dir = new DirectoryIterator($folder);
+
+			foreach ($dir as $fileInfo)
+			{
+			 	if ($fileInfo->isFile())
+			 	{
+			 		$files[] = $fileInfo->getFileName();
+			 	}
+			}
+
+			print_r($files); 
 		}
 	}
 
-	function listController()
-	{
-		$folder = './controllers';
-		$files = [];
-
-		$dir = new DirectoryIterator($folder);
-
-		foreach ($dir as $fileInfo)
-		{
-		 	if ($fileInfo->isFile())
-		 	{
-		 		$files[] = $fileInfo->getFileName();
-		 	}
-		}
-
-		print_r($files); 
-	}
-
-
+	# Get params from php-cli
 	$scriptName = $argv[0];
-	$op = explode('::', $argv[1]);
+	$op = explode(':', $argv[1]);
 	$name = $argv[2] ?? '';
 
-	if (!empty($name))
-	{
-		if (ctype_upper($name[0]) == false)
-		{
-			$name[0] = strtoupper($name[0]);
-		}
-	}
+	# Replace first char to UpperCase
+	// if (!empty($name))
+	// {
+	// 	if (ctype_upper($name[0]) == false)
+	// 	{
+	// 		$name[0] = strtoupper($name[0]);
+	// 	}
+	// }
 
+	# Handle commands
 	if ($op[0] == 'make')
 	{
 		if ($op[1] == 'controller')
 		{
-			makeController($name);
+			Controller::make($name);
 		}
 	}
 	elseif ($op[0] == 'list')
 	{
 		if ($op[1] == 'controller')
 		{
-			listController();
+			Controller::list();
 		}
 	}
 ?>
