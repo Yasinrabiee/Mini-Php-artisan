@@ -1,15 +1,4 @@
 <?php
-/**
- * PHP Colored CLI
- * Used to log strings with custom colors to console using php
- * 
- * Copyright (C) 2013 Sallar Kaboli <sallar.kaboli@gmail.com>
- * MIT Liencesed
- * http://opensource.org/licenses/MIT
- *
- * Original colored CLI output script:
- * (C) Jesse Donat https://github.com/donatj
- */
 class Console {
  
     static $foreground_colors = array(
