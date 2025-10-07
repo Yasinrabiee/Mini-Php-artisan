@@ -1,24 +1,20 @@
 #!/usr/bin/env php
 <?php
-
+	require_once './color-cli.php';
 	class Controller
 	{
 		public static function make($name)
 		{
 			if (empty($name))
 			{
-				echo "Controller name can not be empty...";
+				Console::log("Controller name can not be empty...", 'red');
 				return 0;
 			}
 
 			$content = '';
 
 			$content .= "<?php\n";
-			$content .= "\t# Load controllers class\n";
-			$content .= "\tspl_autoload_register(function (\$class)\n";
-			$content .= "\t{\n";
-			$content .= "\t\trequire_once __DIR__.\"/models/\$class.php\";\n";
-			$content .= "\t});\n";
+			$content .= "\t# Include models file\n";
 
 			$content .= "\tuse eftec\bladeone\BladeOne;\n\n";
 			$content .=	"\tclass ".$name."\n";
@@ -33,7 +29,7 @@
 
 			if (file_put_contents('controllers/'.$name.'.php', $content))
 			{
-				echo "$name controller created successfuly...";
+				Console::log("$name controller created successfuly...", 'green');
 			}
 		}
 
@@ -52,7 +48,19 @@
 			 	}
 			}
 
-			print_r($files); 
+			Console::log(implode("\n", $files), 'cyan'); 
+		}
+
+		public static function delete($name)
+		{
+			if (unlink("./controllers/$name.php"))
+			{
+				Console::log("$name controller deleted successfuly...", 'green');
+			}
+			else
+			{
+				Console::log("Not found $name controller...", 'red');
+			}
 		}
 	}
 
@@ -84,5 +92,12 @@
 		{
 			Controller::list();
 		}
+	}
+	elseif ($op[0] == 'delete')
+	{
+		if ($op[1] == 'controller')
+		{
+			Controller::delete($name);
+		}	
 	}
 ?>
