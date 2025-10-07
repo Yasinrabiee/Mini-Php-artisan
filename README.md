@@ -8,6 +8,7 @@ Now, you can have a mini php artisan (like laravel) with useful commands.
    * make controller
    * delete controller
    * list controllers
+ 
 * Model
   * make model
   * delete model
